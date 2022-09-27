@@ -22,12 +22,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         resetUIs(quizBrain.defaultSet)
-        
     }
-
-    
     
     @IBAction func answerBtnPressed(_ sender: UIButton) {
         
@@ -45,8 +41,8 @@ class ViewController: UIViewController {
             quizBrain.resetQuiz()
         }
         
-        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [self] timer in
-            resetUIs(result)
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { timer in
+            self.resetUIs(result)
         }
     }
      
