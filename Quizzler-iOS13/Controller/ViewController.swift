@@ -13,19 +13,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var storyBoard: UIStackView!
     @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
+    @IBOutlet weak var button1: UIButton!
+    @IBOutlet weak var button2: UIButton!
+    @IBOutlet weak var button3: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     
     var quizBrain = QuizBrain()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        questionLabel.text = "Welcome, Hit buttons to start."
-        resetUIs()
+        resetUIs(quizBrain.defaultSet)
+        
     }
 
     
@@ -33,9 +32,7 @@ class ViewController: UIViewController {
     @IBAction func answerBtnPressed(_ sender: UIButton) {
         
         let result = quizBrain.buttonPressed(sender.currentTitle)
-        
-        questionLabel.text = result.text
-        
+                
         if result.isCorrect == true {
             sender.backgroundColor = UIColor.green
         } else if result.isCorrect == false {
@@ -44,20 +41,36 @@ class ViewController: UIViewController {
             print("Quiz Started!")
         }
         
-        if result.progress == 0 {
+        if result.progress == nil {
             quizBrain.resetQuiz()
         }
-
-        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(resetUIs), userInfo: nil, repeats: false)
+        
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [self] timer in
+            resetUIs(result)
+        }
     }
      
-    @objc func resetUIs() {
-        trueButton.backgroundColor = UIColor.clear
-        falseButton.backgroundColor = UIColor.clear
-        progressBar.progress = quizBrain.getProgress()
-        scoreLabel.text = "Score: \(quizBrain.score)"
+    func resetUIs(_ sets: Progression) {
+        questionLabel.text = sets.text
+
+        for i in 0...2 {
+            let btnSets = [button1, button2, button3]
+            if sets.answer[i] != "" {
+                btnSets[i]?.alpha = 1
+                btnSets[i]?.setTitle(sets.answer[i], for: .normal)
+                btnSets[i]?.backgroundColor = UIColor.clear
+            } else {
+                btnSets[i]?.alpha = 0
+            }
+        }
+        
+        if sets.progress == nil {
+            scoreLabel.text = ""
+            progressBar.progress = 1
+        } else {
+            scoreLabel.text = "Score: \(quizBrain.score)"
+            progressBar.progress = quizBrain.getProgress()
+        }
     }
-    
-    
 }
 

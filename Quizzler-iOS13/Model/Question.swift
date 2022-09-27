@@ -10,22 +10,24 @@ import Foundation
 
 struct Question {
     var text : String
-    var answer : String
+    var answer : [String]
     var correctA : String?
-    
-    init(q: String, a: String) {
+    init(q: String, a: [String], correctAnswer: String) {
         text = q
         answer = a
+        correctA = correctAnswer
     }
 }
 
+
+
 struct Progression {
     var text : String
-    var answer : String
+    var answer : [String]
     var isCorrect : Bool?
     var progress : Int?
     
-    init(q: String, a: String, c: Bool?, p: Int?){
+    init(q: String, a: [String], c: Bool?, p: Int?){
         text = q
         answer = a
         isCorrect = c
